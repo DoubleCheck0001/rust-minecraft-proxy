@@ -2,12 +2,12 @@
 
 minecraft-proxy-rs is a lightweight proxy server for Minecraft.
 
-# Usage
+## Usage
 
 1. Download binary from releases or build with `cargo build --release` and run.
 1. `config.toml` will be created. Please edit if you need.
 
-## Configuration example
+### Configuration example
 
 ```toml
 listen_addr = "0.0.0.0:25565"
