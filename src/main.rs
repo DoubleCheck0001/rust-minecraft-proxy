@@ -13,6 +13,7 @@ use std::env;
 use std::io::Cursor;
 use std::net::SocketAddr;
 use std::path::Path;
+use std::sync::Arc;
 use tokio::net::{TcpListener, TcpStream};
 use tokio::prelude::*;
 
@@ -26,12 +27,13 @@ async fn main() {
     let config = load_conf();
     debug!("Configuration: {:?}", config);
 
-    start(&config).await;
+    start(config).await;
 }
 
-async fn start(config: &Config) {
+async fn start(config: Config) {
     info!("Starting listen on {}", config.get_listen_addr());
     let mut listener = TcpListener::bind(config.get_listen_addr()).await.unwrap();
+    let config = Arc::new(config);
     loop {
         let client = accept_client(&mut listener).await;
         if let Err(e) = client {
@@ -40,7 +42,7 @@ async fn start(config: &Config) {
         }
         let (stream, addr) = client.unwrap();
         debug!("Client connected from {:?}", addr);
-        let config = config.clone();
+        let config = Arc::clone(&config);
         tokio::spawn(async move {
             let result = handle_client(&config, stream, &addr).await;
             if let Err(e) = result {
