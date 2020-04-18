@@ -39,6 +39,7 @@ async fn start(config: &Config) {
             continue;
         }
         let (stream, addr) = client.unwrap();
+        stream.set_nodelay(true).unwrap();
         debug!("Client connected from {:?}", addr);
         let config = config.clone();
         tokio::spawn(async move {
@@ -71,6 +72,7 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
     }
     let redirect_target = redirect_target.unwrap();
     let mut server = TcpStream::connect(redirect_target).await?;
+    server.set_nodelay(true)?;
     packet_utils::write_var_int(&mut server, handshake.get_size()).await?;
     server.write_all(handshake.get_raw_body()).await?;
 
