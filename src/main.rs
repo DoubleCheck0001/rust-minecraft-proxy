@@ -33,22 +33,27 @@ async fn start(config: &Config) {
     info!("Starting listen on {}", config.get_listen_addr());
     let mut listener = TcpListener::bind(config.get_listen_addr()).await.unwrap();
     loop {
-        let client = listener.accept().await;
+        let client = accept_client(&mut listener).await;
         if let Err(e) = client {
-            debug!("Failed to accept a client: {}", e);
+            error!("Failed to accept a client: {}", e);
             continue;
         }
         let (stream, addr) = client.unwrap();
-        stream.set_nodelay(true).unwrap();
         debug!("Client connected from {:?}", addr);
         let config = config.clone();
         tokio::spawn(async move {
             let result = handle_client(&config, stream, &addr).await;
-            if let Some(err) = result.err() {
-                error!("{}: An error occurred: {}", addr, err);
+            if let Err(e) = result {
+                error!("{}: An error occurred: {}", addr, e);
             }
         });
     }
+}
+
+async fn accept_client(listener: &mut TcpListener) -> Result<(TcpStream, SocketAddr)> {
+    let client = listener.accept().await?;
+    client.0.set_nodelay(true)?;
+    Ok(client)
 }
 
 async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr) -> Result<()> {
