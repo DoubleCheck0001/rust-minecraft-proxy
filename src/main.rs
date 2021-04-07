@@ -72,8 +72,10 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
             .unwrap_or_else(|| "unknown".to_string())
     );
     if redirect_target.is_none() {
-        if *handshake.get_next_state() == NextState::Login {
-            disconnect(config, &mut stream).await?;
+        if *handshake.get_next_state() == NextState::Login { // Unknown host, disconnect
+            write_string(&mut stream, &mut config.get_unknown_host_message()).await?; // Disconnect Message
+        } else if *handshake.get_next_state() == NextState::Status { // Unknown host, send unknown host MOTD
+            
         }
         return Ok(());
     }
@@ -105,12 +107,11 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
     Ok(())
 }
 
-async fn disconnect(config: &Config, stream: &mut TcpStream) -> Result<()> {
+async fn write_string(&mut TcpStream, string: &mut &str) -> Result<()> {
     let mut temp: Cursor<Vec<u8>> = Cursor::new(Vec::new());
     packet_utils::write_var_int(&mut temp, 0).await?;
-    let unknown_host_message = config.get_unknown_host_message();
-    packet_utils::write_var_int(&mut temp, unknown_host_message.len() as i32).await?;
-    temp.write_all(&unknown_host_message.as_bytes()).await?;
+    packet_utils::write_var_int(&mut temp, string.len() as i32).await?;
+    temp.write_all(&string.as_bytes()).await?;
     let temp = temp.into_inner();
     packet_utils::write_var_int(stream, temp.len() as i32).await?;
     stream.write_all(&temp).await?;
