@@ -1,6 +1,14 @@
-# minecraft-proxy-rs
+# rust-minecraft-proxy
 
-minecraft-proxy-rs is a lightweight proxy server for Minecraft.
+Updated fork of [kuro46/minecraft-proxy-rs](https://github.com/kuro46/minecraft-proxy-rs) with the goal of adding additional features
+
+## Goals
+- Unknown host MOTD
+- MOTD overrides for known hosts
+- Load balancing between defined hosts
+
+## Disclaimer
+This is a relatively new fork and is not yet ready for production. You can follow the below instructions to get an instance running, but there is a high chance of the structure of the project and configuration changing. Once the project has reached a point where I feel it is ready for a release, such release will be created on this repository. 
 
 ## Usage
 
