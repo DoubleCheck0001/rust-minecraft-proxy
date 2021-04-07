@@ -6,6 +6,10 @@ Updated fork of [kuro46/minecraft-proxy-rs](https://github.com/kuro46/minecraft-
 - Unknown host MOTD
 - Custom online & offline MOTD overrides for defined hosts
 - Load balancing between defined hosts
+- Proxy Protocol support (both incoming and outgoing)
+- TCPShield compatibility & passthrough
+- Forge Support
+- IP based filtering
 - Optional Redis support
 - Basic anti-bot system
 
