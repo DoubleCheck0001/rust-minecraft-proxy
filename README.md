@@ -4,8 +4,10 @@ Updated fork of [kuro46/minecraft-proxy-rs](https://github.com/kuro46/minecraft-
 
 ## Goals
 - Unknown host MOTD
-- MOTD overrides for known hosts
+- Custom online & offline MOTD overrides for defined hosts
 - Load balancing between defined hosts
+- Optional Redis support
+- Basic anti-bot system
 
 ## Disclaimer
 This is a relatively new fork and is not yet ready for production. You can follow the below instructions to get an instance running, but there is a high chance of the structure of the project and configuration changing. Once the project has reached a point where I feel it is ready for a release, such release will be created on this repository. 
