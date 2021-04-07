@@ -107,7 +107,7 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
     Ok(())
 }
 
-async fn write_string(&mut TcpStream, string: &mut &str) -> Result<()> {
+async fn write_string(stream: &mut TcpStream, string: &mut &str) -> Result<()> {
     let mut temp: Cursor<Vec<u8>> = Cursor::new(Vec::new());
     packet_utils::write_var_int(&mut temp, 0).await?;
     packet_utils::write_var_int(&mut temp, string.len() as i32).await?;
