@@ -7,15 +7,19 @@ use std::path::Path;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     listen_addr: String,
-    unknown_host_message: String,
+    unknown_host: BTreeMap<String, String>,
     hosts: BTreeMap<String, String>,
 }
 
 impl Default for Config {
     fn default() -> Self {
+        let mut unknown_host: BTreeMap<String, String> = BTreeMap::new();
+        unknown_host.insert("kick_message".to_string(), "§cInvalid Address".to_string());
+        unknown_host.insert("motd".to_string(), "§cUnknown host!\n§7Please use a valid address to connect.".to_string());
+        unknown_host.insert("protocol_name".to_string(), "§crust-minecraft-proxy".to_string());
         Self {
             listen_addr: "0.0.0.0:25565".to_string(),
-            unknown_host_message: "{\"text\":\"Invalid address.\",\"color\":\"red\"}".to_string(),
+            unknown_host,
             hosts: BTreeMap::new(),
         }
     }
@@ -35,8 +39,20 @@ impl Config {
         }
     }
 
-    pub fn get_unknown_host_message(&self) -> &str {
-        &self.unknown_host_message
+    pub fn get_unknown_host_kick_msg(&self) -> String {
+        let mut message: String =  "{\"text\":\"".to_owned();
+        message.push_str(&self.unknown_host.get("kick_message").as_deref().unwrap_or(&"§cInvalid Address".to_string()));
+        message.push_str("\"}");
+        message
+    }
+
+    pub fn get_unknown_host_motd(&self) -> String {
+        let mut motd: String = "{\"version\": {\"name\": \"".to_owned();
+        motd.push_str(&self.unknown_host.get("protocol_name").as_deref().unwrap_or(&"§cInvalid Address".to_string()));
+        motd.push_str("\", \"protocol\": -1 }, \"players\": {\"max\": 0, \"online\": 0, \"sample\": [] }, \"description\": { \"text\": \"");
+        motd.push_str(&self.unknown_host.get("motd").as_deref().unwrap_or(&"§cUnknown host!\n§7Please use a valid address to connect.".to_string()));
+        motd.push_str("\" }}");
+        motd
     }
 
     pub fn get_listen_addr(&self) -> &str {
