@@ -22,7 +22,7 @@ This is a relatively new fork and is not yet ready for production. You can follo
 ## Usage
 
 1. Download binary from releases or build with `cargo build --release` and run.
-1. `config.toml` will be created. Please edit if you need.
+1. `config.yml` will be created. Please edit if you need.
 
 ### Configuration example
 
