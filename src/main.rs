@@ -142,7 +142,7 @@ async fn write_string(stream: &mut TcpStream, string: &mut &str) -> Result<()> {
 }
 
 fn load_conf() -> Config {
-    let config_path = Path::new("./config.toml");
+    let config_path = Path::new("./config.yml");
     info!("Configuration file: {:?}", config_path);
     Config::load_or_init(config_path)
 }

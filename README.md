@@ -26,18 +26,16 @@ This is a relatively new fork and is not yet ready for production. You can follo
 
 ### Configuration example
 
-```toml
-listen_addr = "0.0.0.0:25565"
-
-[unknown_host]
-kick_message = "§bRust Minecraft Proxy\n\n§cInvalid Address"
-motd = "§cUnknown host!\n§7Please use a valid address to connect."
-protocol_name = "§crust-minecraft-proxy"
-
-[host."hub.example.com"]
-ip = "127.0.0.1:35560"
-
-[host."minigame.example.com"]
-ip = "127.0.0.1:25561"
-
+```yaml
+listen_addr: "0.0.0.0:25565"
+unknown_host:
+  kick_message: "§bRust Minecraft Proxy\n\n§cInvalid Address"
+  motd:
+    text: "§cUnknown host!\n§7Please use a valid address to connect."
+    protocol_name: §crust-minecraft-proxy
+host:
+  hub.example.com:
+    ip: "127.0.0.1:35560"
+  minigame.example.com:
+    ip: "127.0.0.1:25561"
 ```
