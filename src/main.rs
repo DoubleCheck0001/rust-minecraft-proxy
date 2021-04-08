@@ -16,7 +16,6 @@ use std::path::Path;
 use std::sync::Arc;
 use tokio::net::{TcpListener, TcpStream};
 use tokio::prelude::*;
-use std::borrow::Borrow;
 
 #[tokio::main]
 async fn main() {
@@ -32,7 +31,7 @@ async fn main() {
 }
 
 async fn start(config: Config) {
-    info!("Starting listen on {}", config.get_listen_addr());
+    info!("Listening on {}", config.get_listen_addr());
     let mut listener = TcpListener::bind(config.get_listen_addr()).await.unwrap();
     let config = Arc::new(config);
     loop {
@@ -72,7 +71,7 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
         host,
         handshake.get_port(),
         redirect_target
-            .map(|s| s.to_string())
+            .map(|s| s.ip.to_string())
             .unwrap_or_else(|| "unknown".to_string())
     );
     if redirect_target.is_none() {
@@ -83,8 +82,7 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
         }
         return Ok(());
     }
-    let redirect_target = redirect_target.unwrap();
-    let mut server = TcpStream::connect(redirect_target).await?;
+    let mut server = TcpStream::connect(redirect_target.map(|s| s.ip.to_string()).unwrap()).await?;
     server.set_nodelay(true)?;
     packet_utils::write_var_int(&mut server, handshake.get_size()).await?;
     server.write_all(handshake.get_raw_body()).await?;
