@@ -33,7 +33,3 @@ protocol_name = "§crust-minecraft-proxy"
 hub.example.com = "127.0.0.1:35560"
 minigame.example.com = "127.0.0.1:25561"
 ```
-
-If connect with `hub.example.com`, it will connect to `127.0.0.1:35560`.  
-If connect with `minigame.example.com`, it will connect to `127.0.0.1:35561`.  
-If connect with other hosts, it will be disconnected and shows `Invalid address.` message.
