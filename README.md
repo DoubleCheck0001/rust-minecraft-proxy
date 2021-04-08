@@ -14,7 +14,7 @@ Updated fork of [kuro46/minecraft-proxy-rs](https://github.com/kuro46/minecraft-
 - Basic anti-bot system
 
 ## Disclaimer
-This is a relatively new fork and is not yet ready for production. You can follow the below instructions to get an instance running, but there is a high chance of the structure of the project and configuration changing. Once the project has reached a point where I feel it is ready for a release, such release will be created on this repository. 
+This is a relatively new fork and is not yet ready for production. You can follow the instructions below to get an instance running, but there is a high chance of the structure of the project and configuration changing. Once the project has reached a point where I feel it is ready for a release, such release will be created on this repository. This project also serves as a way for me to learn Rust, so I am by no means a Rust developer yet. If there's anything that can be done better, feel free to fork and submit a pull request as well as add me on discord (DoubleCheck#0001) for code suggestions. 
 
 ## Usage
 
