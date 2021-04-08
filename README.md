@@ -1,4 +1,5 @@
 # rust-minecraft-proxy
+<img alt="Discord" src="https://img.shields.io/discord/752389778636406934?color=7289da&label=Discord">
 
 Updated fork of [kuro46/minecraft-proxy-rs](https://github.com/kuro46/minecraft-proxy-rs) with the goal of adding additional features
 
