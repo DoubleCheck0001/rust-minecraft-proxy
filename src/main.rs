@@ -16,6 +16,7 @@ use std::path::Path;
 use std::sync::Arc;
 use tokio::net::{TcpListener, TcpStream};
 use tokio::prelude::*;
+use std::borrow::Borrow;
 
 #[tokio::main]
 async fn main() {
@@ -60,12 +61,15 @@ async fn accept_client(listener: &mut TcpListener) -> Result<(TcpStream, SocketA
 
 async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr) -> Result<()> {
     let handshake = HandshakeRequest::read(&mut stream).await?;
-    let redirect_target = config.get_addr_by_host(&handshake.get_host());
+
+    let host: &str = &handle_hostname(handshake.get_host()).await;
+
+    let redirect_target = config.get_addr_by_host(host);
     info!(
         "{}: {}: {}:{} -> {}",
         addr,
         handshake.get_next_state(),
-        handshake.get_host(),
+        host,
         handshake.get_port(),
         redirect_target
             .map(|s| s.to_string())
@@ -105,6 +109,27 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
         );
     }
     Ok(())
+}
+
+async fn handle_hostname(hostname: &str) -> String {
+    let mut host: String = hostname.to_owned();
+
+    // TCPShield Support (UNTESTED!)
+    if host.contains("///") {
+        let parts = host.split("///");
+        for part in parts {
+            host = part.to_owned();
+            break;
+        }
+    }
+
+    // Forge Support
+    if host.contains("FML2") {
+        host = host.replace("FML2", "");
+    } else if host.contains("FML") {
+        host = host.replace("FML", "");
+    }
+    host
 }
 
 async fn write_string(stream: &mut TcpStream, string: &mut &str) -> Result<()> {
