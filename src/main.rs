@@ -73,9 +73,9 @@ async fn handle_client(config: &Config, mut stream: TcpStream, addr: &SocketAddr
     );
     if redirect_target.is_none() {
         if *handshake.get_next_state() == NextState::Login { // Unknown host, disconnect
-            write_string(&mut stream, &mut config.get_unknown_host_message()).await?; // Disconnect Message
+            write_string(&mut stream, &mut &**&mut config.get_unknown_host_kick_msg()).await?; // Disconnect Message
         } else if *handshake.get_next_state() == NextState::Status { // Unknown host, send unknown host MOTD
-            
+            write_string(&mut stream, &mut &**&mut config.get_unknown_host_motd()).await?; // MOTD
         }
         return Ok(());
     }
