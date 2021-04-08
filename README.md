@@ -24,8 +24,10 @@ This is a relatively new fork and is not yet ready for production. You can follo
 ### Configuration example
 
 ```toml
-listen_addr = "0.0.0.0:25565"
-unknown_host_message = "{\"text\":\"Invalid address.\",\"color\":\"red\"}"
+[unknown_host]
+kick_message = "§cInvalid Address"
+motd = "§cUnknown host!\n§7Please use a valid address to connect."
+protocol_name = "§crust-minecraft-proxy"
 
 [hosts]
 hub.example.com = "127.0.0.1:35560"
